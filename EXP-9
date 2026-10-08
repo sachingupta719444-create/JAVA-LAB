@@ -1,0 +1,47 @@
+class ReservationThread extends Thread{
+    @Override
+    public void run(){
+        try{
+            for(int i=1; i<=5; i++){
+                System.out.println("Reservation Status : processing reservation " + i);
+                Thread.sleep(500);
+            }
+        }
+        catch(InterruptedException e){
+            System.out.println("Reservation thread interrupted");
+        }
+    }
+}
+
+class StatusThread implements Runnable{
+    @Override
+    public void run(){
+        try{
+            for(int i=1; i<=5; i++){
+                System.out.println("Ticket Confirmation : Confirmation " + i);
+                Thread.sleep(500);
+            }
+        }
+        catch(InterruptedException e){
+            System.out.println("Status thread interrupted");
+        }
+    }
+}
+
+class StatusThread implements Runnable{
+    @Override
+    public void run(){
+        try{
+            for(int i=1; i<=5; i++){
+                System.out.println("Ticket Confirmation : Confirmation " + i);
+                reservation.join();
+                status_thread.join();
+            }
+        }
+        catch(InterruptedException e){
+            System.out.println("main thread interrupted");
+        }
+
+        System.out.println("Both threads completed");
+    }
+}
