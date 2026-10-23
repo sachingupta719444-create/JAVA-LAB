@@ -1,0 +1,63 @@
+class Printer {
+
+    synchronized void printDocument(String document) {
+        System.out.println(Thread.currentThread().getName()
+                + " is printing " + document);
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            System.out.println(e);
+        }
+
+        System.out.println(Thread.currentThread().getName()
+                + " finished printing");
+    }
+}
+
+class UserThread extends Thread {
+
+    private Printer printer;
+
+    UserThread(Printer printer, String name) {
+        super(name);
+        this.printer = printer;
+    }
+
+    public void run() {
+        System.out.println(getName() + " started");
+
+        printer.printDocument("Document");
+
+        System.out.println(getName() + " terminated");
+    }
+}
+
+public class Exercise11 {
+
+    public static void main(String[] args) throws InterruptedException {
+
+        Printer printer = new Printer();
+
+        UserThread t1 = new UserThread(printer, "User-1");
+        UserThread t2 = new UserThread(printer, "User-2");
+
+        System.out.println("Initial state of t1: " + t1.getState());
+
+        t1.start();
+        t2.start();
+
+        Thread.sleep(100);
+
+        System.out.println("Current state of t1: " + t1.getState());
+
+        t1.join();
+        t2.join();
+
+        System.out.println("Final state of t1: " + t1.getState());
+
+        System.out.println(
+            "Deadlock prevention: Both threads use a single shared lock."
+        );
+    }
+}
